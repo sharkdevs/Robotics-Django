@@ -13,6 +13,7 @@ class RegisterUsers(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         email = request.data.get("email", "")
+        username = request.data.get("username", "")
         password = request.data.get("password", "")
         if not email and not password:
             return Response(
@@ -22,7 +23,7 @@ class RegisterUsers(generics.CreateAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
         new_user = User.objects.create_user(
-            email=email, password=password, username=''
+            email=email, password=password, username=username
         )
         return Response(
             data=UserSerializer(new_user).data,
