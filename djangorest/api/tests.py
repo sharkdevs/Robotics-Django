@@ -1,7 +1,7 @@
 from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 # Create your tests here.
 from .models import Bucketlist
@@ -39,4 +39,4 @@ class ViewTests(TestCase):
     
     def test_view_api_to_create_bucketlist(self):
         """Test whether the API can create a bucketlist"""
-        self.assertNotEqual(self.response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
