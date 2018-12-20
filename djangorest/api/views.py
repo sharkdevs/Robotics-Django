@@ -5,6 +5,8 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views  import status
 
+from .serializer import UserSerializer
+
 class RegisterUsers(generics.CreateAPIView):
     """POST auth/register/"""
     permission_classes = (permissions.AllowAny,)
