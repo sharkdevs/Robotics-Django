@@ -16,6 +16,21 @@ class RegisterUsers(generics.CreateAPIView):
         email = request.data.get("email", "")
         username = request.data.get("username", "")
         password = request.data.get("password", "")
+        confirm_password = request.data.get("confirm_password", "")
+        if User.objects.filter(username=username).exists():
+            return Response(
+                data={
+                    "message": "username is already taken"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        if password != confirm_password:
+            return Response(
+                data={
+                    "message": "passwords do not match"
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
         if not email and not username and not password:
             return Response(
                 data={

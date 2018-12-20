@@ -20,6 +20,6 @@ from api.views import RegisterUsers
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/register/', RegisterUsers.as_view(), name="auth-register")
+    path('auth/register', RegisterUsers.as_view(), name="auth-register")
 
 ]
