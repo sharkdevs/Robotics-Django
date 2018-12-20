@@ -17,12 +17,13 @@ class AuthenticationRegisterUser(TestCase):
                                         "confirm_password": "testPassword1234"
                                     }), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
     def test_register_user_with_invalid_details(self):
-            response = APIClient().post(reverse("auth-register"),
-                                        data=json.dumps({
-                                            "email": "",
-                                            "username": "",
-                                            "password": "",
-                                            "confirm_password": ""
-                                        }), content_type="application/json")
-            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = APIClient().post(reverse("auth-register"),
+                                    data=json.dumps({
+                                        "email": "",
+                                        "username": "",
+                                        "password": "",
+                                        "confirm_password": ""
+                                    }), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

@@ -3,9 +3,10 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.views  import status
+from rest_framework.views import status
 
 from .serializer import UserSerializer
+
 
 class RegisterUsers(generics.CreateAPIView):
     """POST auth/register/"""
@@ -15,10 +16,10 @@ class RegisterUsers(generics.CreateAPIView):
         email = request.data.get("email", "")
         username = request.data.get("username", "")
         password = request.data.get("password", "")
-        if not email and not password:
+        if not email and not username and not password:
             return Response(
                 data={
-                    "message": "email, password and email is required to register a user"
+                    "message": "email, password and username is required to register a user"
                 },
                 status=status.HTTP_400_BAD_REQUEST
             )
