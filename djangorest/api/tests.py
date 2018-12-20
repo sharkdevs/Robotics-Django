@@ -11,7 +11,7 @@ class ModelTests(TestCase):
         """Setup the tests."""
 
         self.title = "My Bucket world"
-        self.bucketlist = Bucketlist(name=self.title)
+        self.bucketlist = Bucketlist(title=self.title)
 
     def test_create_bucketlist(self):
         """Test whethere a new record of the bucketlist was created."""
