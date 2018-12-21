@@ -4,9 +4,8 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import status
-from .serializers import BucketlistSerializer
+from .serializers import UserSerializer, BucketlistSerializer
 from .models import Bucketlist
-from .serializer import UserSerializer
 
 
 class RegisterUsers(generics.CreateAPIView):
