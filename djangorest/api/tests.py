@@ -40,3 +40,12 @@ class ViewTests(TestCase):
     def test_view_api_to_create_bucketlist(self):
         """Test whether the API can create a bucketlist"""
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+
+    def test_api_can_delete_bucketlist(self):
+        """ Test that the api can delete bucketlist."""
+        Bucketlist = Bucketlist.objects.get()
+        response = self.client.delete(
+            reverse('details', kwargs={'pk': bucketlist.id}),
+            format='json',
+            follow=True)
