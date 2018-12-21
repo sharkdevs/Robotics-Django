@@ -44,8 +44,10 @@ class ViewTests(TestCase):
 
     def test_api_can_delete_bucketlist(self):
         """ Test that the api can delete bucketlist."""
-        Bucketlist = Bucketlist.objects.get()
+        bucketlist = Bucketlist.objects.get()
         response = self.client.delete(
             reverse('details', kwargs={'pk': bucketlist.id}),
             format='json',
             follow=True)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
