@@ -9,7 +9,7 @@ from .models import Bucketlist
 
 class ModelTests(TestCase):
     """Bucketlist Teststuite."""
-    
+
     def setUp(self):
         """Setup the tests."""
 
@@ -22,7 +22,10 @@ class ModelTests(TestCase):
         num_items = Bucketlist.objects.count()
         self.bucketlist.save()
         new_num_items = Bucketlist.objects.count()
-        self.assertNotEqual(num_items,new_num_items)
+        self.assertNotEqual(num_items, new_num_items)
+
+    # def test_update_bucketlist(self):
+
 
 class ViewTests(TestCase):
     """Test Buckets List views"""
@@ -36,7 +39,18 @@ class ViewTests(TestCase):
             self.bucketlist_data,
             format="json"
         )
-    
+
     def test_view_api_to_create_bucketlist(self):
         """Test whether the API can create a bucketlist"""
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
+
+    def test_view_api_to_update_bucketlist(self):
+        """Test the api can update a bucketlist."""
+        bucketlist = Bucketlist.objects.get()
+        updated_bucketlist_details = {'title': 'I wanna debug'}
+        response = self.client.put(
+            reverse('details', kwargs={'pk': bucketlist.id}),
+            updated_bucketlist_details, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['title'], 'I wanna debug')
