@@ -4,7 +4,8 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import status
-
+from .serializers import BucketlistSerializer
+from  .models import Bucketlist
 from .serializer import UserSerializer
 
 
@@ -45,3 +46,12 @@ class RegisterUsers(generics.CreateAPIView):
             data=UserSerializer(new_user).data,
             status=status.HTTP_201_CREATED
         )
+
+class CreateView(generics.ListCreateAPIView):
+    ''' defining create behavior for the rest api '''
+    queryset=Bucketlist.objects.all()
+    serializer_class=BucketlistSerializer
+
+    def perform_create(self,serializer):
+        '''save new bucketlist data '''
+        serializer.save()
