@@ -41,6 +41,7 @@ class LoginView(generics.CreateAPIView):
                     jwt_payload_handler(user)
                 )})
             serializer.is_valid()
+            
             return Response(serializer.data)
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
