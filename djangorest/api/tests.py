@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 
 from .models import Bucketlist
 
+
 class AuthenticationRegisterUser(TestCase):
     """Tests suite for auth/register  endpoint"""
 
@@ -31,10 +32,9 @@ class AuthenticationRegisterUser(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-
 class ModelTests(TestCase):
     """Bucketlist Teststuite."""
-    
+
     def setUp(self):
         """Setup the tests."""
 
@@ -47,7 +47,8 @@ class ModelTests(TestCase):
         num_items = Bucketlist.objects.count()
         self.bucketlist.save()
         new_num_items = Bucketlist.objects.count()
-        self.assertNotEqual(num_items,new_num_items)
+        self.assertNotEqual(num_items, new_num_items)
+
 
 class ViewTests(TestCase):
     """Test Buckets List views"""
@@ -61,12 +62,21 @@ class ViewTests(TestCase):
             self.bucketlist_data,
             format="json"
         )
-    
+
     def test_view_api_to_create_bucketlist(self):
         """Test whether the API can create a bucketlist"""
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
+    def test_view_api_to_update_bucketlist(self):
+        """Test the api can update a bucketlist."""
+        bucketlist = Bucketlist.objects.get()
+        updated_bucketlist_details = {'title': 'I wanna debug'}
+        response = self.client.put(
+            reverse('details', kwargs={'pk': bucketlist.id}),
+            updated_bucketlist_details, format='json')
 
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['title'], 'I wanna debug')
 
     def test_api_can_delete_bucketlist(self):
         """ Test that the api can delete bucketlist."""

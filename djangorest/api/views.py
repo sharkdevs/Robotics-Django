@@ -4,13 +4,11 @@ from rest_framework import generics
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import status
-from .serializers import BucketlistSerializer, TokenSerializer
-from  .models import Bucketlist
-from .serializer import UserSerializer
+from .serializers import UserSerializer, BucketlistSerializer, TokenSerializer
+from .models import Bucketlist
 
 from django.contrib.auth import authenticate, login
 from rest_framework_jwt.settings import api_settings
-
 
 # Get the JWT settings, add these lines after the import/from lines
 jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
@@ -48,17 +46,16 @@ class LoginView(generics.CreateAPIView):
                     jwt_payload_handler(user)
                 )})
             serializer.is_valid()
-            
+
             return Response(serializer.data)
         return Response(
             data={
                 "message": "Wrong credentials. Check username or password"
             },
             status=status.HTTP_401_UNAUTHORIZED
-            
-            )
 
-# Create your views here.
+        )
+
 
 class RegisterUsers(generics.CreateAPIView):
     """POST auth/register/"""
@@ -98,18 +95,20 @@ class RegisterUsers(generics.CreateAPIView):
             status=status.HTTP_201_CREATED
         )
 
+
 class CreateView(generics.ListCreateAPIView):
-    ''' defining create behavior for the rest api '''
-    queryset=Bucketlist.objects.all()
-    serializer_class=BucketlistSerializer
+    """ defining create behavior for the rest api """
+    queryset = Bucketlist.objects.all()
+    serializer_class = BucketlistSerializer
     permission_classes = (permissions.AllowAny,)
 
-    def perform_create(self,serializer):
-        '''save new bucketlist data '''
+    def perform_create(self, serializer):
+        """ save new bucketlist data """
         serializer.save()
 
+
 class DetailsView(generics.RetrieveUpdateDestroyAPIView):
-    """ This class handles the http GET, PUT and DELETE requests"""
+    """This class handles the http GET, PUT and DELETE requests."""
 
     queryset = Bucketlist.objects.all()
     serializer_class = BucketlistSerializer
