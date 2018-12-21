@@ -1,13 +1,36 @@
 import json
 
 from django.test import TestCase
-from rest_framework.test import APIClient
-from rest_framework import status
+from rest_framework.test import APITestCase, APIClient
+from rest_framework.views import status
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-# Create your tests here.
 from .models import Bucketlist
+
+class AuthenticationRegisterUser(TestCase):
+    """Tests suite for auth/register  endpoint"""
+
+    def test_register_user_with_valid_details(self):
+        response = APIClient().post(reverse("auth-register"),
+                                    data=json.dumps({
+                                        "email": "test@mail.com",
+                                        "username": "jon",
+                                        "password": "testPassword1234",
+                                        "confirm_password": "testPassword1234"
+                                    }), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_register_user_with_invalid_details(self):
+        response = APIClient().post(reverse("auth-register"),
+                                    data=json.dumps({
+                                        "email": "",
+                                        "username": "",
+                                        "password": "",
+                                        "confirm_password": ""
+                                    }), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
 
 
 
@@ -100,8 +123,16 @@ class AuthLoginUserTest(BaseViewTest):
     """
 
     def test_login_user_with_valid_credentials(self):
+        response = APIClient().post(reverse("auth-register"),
+                                    data=json.dumps({
+                                        "email": "test@mail.com",
+                                        "username": "jon",
+                                        "password": "testPassword1234",
+                                        "confirm_password": "testPassword1234"
+                                    }), content_type="application/json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # test login with valid credentials
-        response = self.login_a_user("test_user", "testing")
+        response = self.login_a_user("jon", "testPassword1234")
         # assert token key exists
         self.assertIn("token", response.data)
         # assert status code is 200 OK
@@ -109,4 +140,4 @@ class AuthLoginUserTest(BaseViewTest):
         # test login with invalid credentials
         response = self.login_a_user("anonymous", "pass")
         # assert status code is 401 UNAUTHORIZED
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)

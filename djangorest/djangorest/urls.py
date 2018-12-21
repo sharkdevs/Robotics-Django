@@ -16,9 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls import url, include
 from rest_framework_jwt.views import obtain_jwt_token
+from django.urls import path
+from api.views import RegisterUsers
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('auth/register', RegisterUsers.as_view(), name="auth-register"),
     url(r'^api-token-auth/', obtain_jwt_token, name='create-token'),
     url(r'^',include('api.urls'))
 ]
