@@ -10,6 +10,7 @@ class BucketlistSerializer(serializers.ModelSerializer):
         fields=('id','title','date_created','date_modified')
         read_only_fields=('date_created','date_modified')
 
+
 class TokenSerializer(serializers.Serializer):
     """
     This serializer serializes the token data

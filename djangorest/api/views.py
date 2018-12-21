@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
-from .serializers import BucketlistSerializer, TokenSerializer
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import status
+from .serializers import BucketlistSerializer, TokenSerializer
 from  .models import Bucketlist
 from .serializer import UserSerializer
 
@@ -36,7 +36,7 @@ class LoginView(generics.CreateAPIView):
                 data={
                     "message": "User does not exist"
                 },
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_401_UNAUTHORIZED
             )
         if user is not None:
             # login saves the user’s ID in the session,
@@ -113,3 +113,4 @@ class DetailsView(generics.RetrieveUpdateDestroyAPIView):
 
     queryset = Bucketlist.objects.all()
     serializer_class = BucketlistSerializer
+    permission_classes = (permissions.AllowAny,)

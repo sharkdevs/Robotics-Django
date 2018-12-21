@@ -1,5 +1,4 @@
 import json
-
 from django.test import TestCase
 from rest_framework.test import APITestCase, APIClient
 from rest_framework.views import status
@@ -30,8 +29,6 @@ class AuthenticationRegisterUser(TestCase):
                                         "confirm_password": ""
                                     }), content_type="application/json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-
 
 
 
@@ -70,6 +67,17 @@ class ViewTests(TestCase):
         self.assertEqual(self.response.status_code, status.HTTP_201_CREATED)
 
 
+
+    def test_api_can_delete_bucketlist(self):
+        """ Test that the api can delete bucketlist."""
+        bucketlist = Bucketlist.objects.get()
+        response = self.client.delete(
+            reverse('details', kwargs={'pk': bucketlist.id}),
+            format='json',
+            follow=True)
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
 class BaseViewTest(TestCase):
     client = APIClient()
 
@@ -85,17 +93,7 @@ class BaseViewTest(TestCase):
             }),
             content_type="application/json"
         )
-
-    def setUp(self):
-        # create a admin user
-        self.user = User.objects.create_superuser(
-            username="test_user",
-            email="test@mail.com",
-            password="testing",
-            first_name="test",
-            last_name="user",
-        )
-
+    
     def login_client(self, username="", password=""):
         # get a token from DRF
         response = self.client.post(
@@ -116,7 +114,6 @@ class BaseViewTest(TestCase):
         self.client.login(username=username, password=password)
         return self.token
 
-
 class AuthLoginUserTest(BaseViewTest):
     """
     Tests for the auth/login/ endpoint
@@ -130,7 +127,6 @@ class AuthLoginUserTest(BaseViewTest):
                                         "password": "testPassword1234",
                                         "confirm_password": "testPassword1234"
                                     }), content_type="application/json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         # test login with valid credentials
         response = self.login_a_user("jon", "testPassword1234")
         # assert token key exists
@@ -140,4 +136,4 @@ class AuthLoginUserTest(BaseViewTest):
         # test login with invalid credentials
         response = self.login_a_user("anonymous", "pass")
         # assert status code is 401 UNAUTHORIZED
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
